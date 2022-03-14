@@ -1,20 +1,27 @@
+import dotenv from "dotenv"
+dotenv.config()
+
 import { ApolloServerPluginLandingPageGraphQLPlayground, ApolloServerPluginDrainHttpServer } from "apollo-server-core"
+import { makeExecutableSchema } from '@graphql-tools/schema'
 
 import { SubscriptionServer } from 'subscriptions-transport-ws'
 import { subscribe, execute } from 'graphql'
 
 import { ApolloServer } from "apollo-server-express"
-import { schema } from "./graphql/graphql"
 import express from "express"
-
 import http from "http"
+
+import { typeDefs, resolvers } from './graphql/schema'
+import { connectMongo } from "./mongo/mongo"
 
 const PORT = 4000
 
 const createServer = async () => {
+  const DB = await connectMongo()
   const app = express()
   const httpServer = http.createServer(app)
 
+  const schema = makeExecutableSchema({ typeDefs, resolvers });
   const server = new ApolloServer({
     schema,
     plugins: [
@@ -29,10 +36,11 @@ const createServer = async () => {
           };
         }
       }
-    ]
+    ],
+    context: () => {
+      return { DB }
+    }
   })
-
-
 
 
   await server.start()
@@ -64,7 +72,8 @@ const createServer = async () => {
     );
   });
 
+  const listings = await DB.listings.find({}).toArray()
+  console.log(listings)
 }
-
 
 createServer()
