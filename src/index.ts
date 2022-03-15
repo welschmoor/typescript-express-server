@@ -14,7 +14,7 @@ import http from "http"
 import { typeDefs, resolvers } from './graphql/schema'
 import { connectMongo } from "./mongo/mongo"
 
-const PORT = 4000
+const PORT = process.env.PORT
 
 const createServer = async () => {
   const DB = await connectMongo()
