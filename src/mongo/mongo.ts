@@ -14,7 +14,7 @@ export const connectMongo = async (): Promise<Database> => {
   const DB = client.db('DB')
 
   return {
-    listings: DB.collection('test')
+    anzeigen: DB.collection('test')
   }
 }
 

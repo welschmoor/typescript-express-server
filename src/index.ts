@@ -72,8 +72,8 @@ const createServer = async () => {
     );
   });
 
-  const listings = await DB.listings.find({}).toArray()
-  console.log(listings)
+  const anzeigen = await DB.anzeigen.find({}).toArray()
+  console.log(anzeigen)
 }
 
 createServer()

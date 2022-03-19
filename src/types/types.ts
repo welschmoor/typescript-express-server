@@ -9,7 +9,7 @@ export interface Listing {
 }
 
 export interface Database {
-  listings: Collection<Listing>;
+  anzeigen: Collection<Listing>;
 
 }
 
